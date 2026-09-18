@@ -1,56 +1,44 @@
 const incidencias = [];
 
 const registrarIncidencia = (req, res) => {
-    const {
-        empleado,
-        descripcion,
-        prioridad
-    } = req.body;
 
-    if (
-        !empleado ||
-        !descripcion ||
-        !prioridad
-    ) {
-        return res.status(400).json({
-            mensaje: "Todos los campos son obligatorios"
-        });
-    }
+const {
+    empleado,
+    descripcion,
+    prioridad
+} = req.body;
 
-    if (
-        empleado.trim() === "" ||
-        descripcion.trim() === "" ||
-        prioridad.trim() === ""
-    ) {
-        return res.status(400).json({
-            mensaje: "No se permiten campos vacíos"
-        });
-    }
 
-    if (
-        prioridad !== "Alta" &&
-        prioridad !== "Media" &&
-        prioridad !== "Baja"
-    ) {
-        return res.status(400).json({
-            mensaje: "La prioridad debe ser Alta, Media o Baja"
-        });
-    }
+if (
+    !empleado ||
+    !descripcion ||
+    !prioridad
+) {
+    return res.status(400).json({
+        mensaje: "Todos los campos son obligatorios"
+    });
+}
 
     const nuevaIncidencia = {
-        id: incidencias.length + 1,
-        empleado: empleado,
-        descripcion: descripcion,
-        prioridad: prioridad,
-        estado: "Pendiente"
-    };
 
-    incidencias.push(nuevaIncidencia);
+    id: incidencias.length + 1,
+    empleado,
+    descripcion,
+    prioridad,
+    estado: "Pendiente"
 
-    return res.status(201).json({
-        mensaje: "Incidencia registrada correctamente",
-        incidencia: nuevaIncidencia
-    });
+};
+
+
+incidencias.push(nuevaIncidencia);
+
+
+return res.status(201).json({
+    mensaje: "Incidencia registrada correctamente",
+    incidencia: nuevaIncidencia
+});
+
+
 };
 
 const listarIncidencias = (req, res) => {
@@ -173,10 +161,95 @@ const eliminarIncidencia = (req, res) => {
     });
 };
 
+const obtenerEstadisticas = (req,res)=>{
+
+const totalIncidencias = incidencias.length;
+
+
+const pendientes = incidencias.filter(
+    incidencia => incidencia.estado === "Pendiente"
+).length;
+
+
+const enProceso = incidencias.filter(
+    incidencia => incidencia.estado === "En proceso"
+).length;
+
+
+const resueltas = incidencias.filter(
+    incidencia => incidencia.estado === "Resuelta"
+).length;
+
+
+const canceladas = incidencias.filter(
+    incidencia => incidencia.estado === "Cancelada"
+).length;
+
+
+
+return res.status(200).json({
+
+    totalIncidencias,
+    pendientes,
+    enProceso,
+    resueltas,
+    canceladas
+
+});
+
+};
+
+const clasificarIncidencia = (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const incidenciaEncontrada = incidencias.find(
+        (incidencia) => incidencia.id === id
+    );
+
+
+    if (!incidenciaEncontrada) {
+        return res.status(404).json({
+            mensaje: "Incidencia no encontrada"
+        });
+    }
+
+
+    let clasificacion;
+
+
+    switch (incidenciaEncontrada.prioridad.trim().toLowerCase()) {
+
+        case "alta":
+            clasificacion = "Crítica";
+            break;
+
+        case "media":
+            clasificacion = "Importante";
+            break;
+
+        case "baja":
+            clasificacion = "Normal";
+            break;
+
+        default:
+            clasificacion = "No definida";
+    }
+
+
+    return res.status(200).json({
+        id: incidenciaEncontrada.id,
+        clasificacion
+    });
+
+};
+
 module.exports = {
     registrarIncidencia,
     listarIncidencias,
     buscarIncidenciaPorId,
     cambiarEstadoIncidencia,
-    eliminarIncidencia
+    eliminarIncidencia,
+    obtenerEstadisticas,
+    clasificarIncidencia
 };
