@@ -6,7 +6,7 @@ const {
     listarIncidencias,
     buscarIncidenciaPorId,
     cambiarEstadoIncidencia,
-    eliminarIncidencia
+    eliminarIncidencia,
 } = require("../controllers/incidenciasController");
 
 router.post("/", registrarIncidencia);
