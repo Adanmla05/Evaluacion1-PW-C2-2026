@@ -22,5 +22,8 @@
   "homepage": "https://github.com/Adanmla05/Evaluacion1-PW-C2-2026#readme",
   "dependencies": {
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
