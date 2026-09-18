@@ -7,9 +7,12 @@ const {
     buscarIncidenciaPorId,
     cambiarEstadoIncidencia,
     eliminarIncidencia,
+    obtenerEstadisticas,
 } = require("../controllers/incidenciasController");
 
 router.post("/", registrarIncidencia);
+
+router.get("/estadisticas", obtenerEstadisticas);
 
 router.get("/", listarIncidencias);
 

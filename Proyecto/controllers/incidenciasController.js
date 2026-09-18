@@ -161,10 +161,50 @@ const eliminarIncidencia = (req, res) => {
     });
 };
 
+const obtenerEstadisticas = (req,res)=>{
+
+const totalIncidencias = incidencias.length;
+
+
+const pendientes = incidencias.filter(
+    incidencia => incidencia.estado === "Pendiente"
+).length;
+
+
+const enProceso = incidencias.filter(
+    incidencia => incidencia.estado === "En proceso"
+).length;
+
+
+const resueltas = incidencias.filter(
+    incidencia => incidencia.estado === "Resuelta"
+).length;
+
+
+const canceladas = incidencias.filter(
+    incidencia => incidencia.estado === "Cancelada"
+).length;
+
+
+
+return res.status(200).json({
+
+    totalIncidencias,
+    pendientes,
+    enProceso,
+    resueltas,
+    canceladas
+
+});
+
+
+};
+
 module.exports = {
     registrarIncidencia,
     listarIncidencias,
     buscarIncidenciaPorId,
     cambiarEstadoIncidencia,
     eliminarIncidencia,
+    obtenerEstadisticas
 };
