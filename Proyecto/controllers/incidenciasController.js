@@ -197,6 +197,53 @@ return res.status(200).json({
 
 });
 
+};
+
+const clasificarIncidencia = (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const incidenciaEncontrada = incidencias.find(
+        (incidencia) => incidencia.id === id
+    );
+
+
+    if (!incidenciaEncontrada) {
+        return res.status(404).json({
+            mensaje: "Incidencia no encontrada"
+        });
+    }
+
+
+    let clasificacion;
+
+
+    switch (incidenciaEncontrada.prioridad) {
+
+        case "Alta":
+            clasificacion = "Crítica";
+            break;
+
+
+        case "Media":
+            clasificacion = "Importante";
+            break;
+
+
+        case "Baja":
+            clasificacion = "Normal";
+            break;
+
+
+        default:
+            clasificacion = "No definida";
+    }
+
+
+    return res.status(200).json({
+        id: incidenciaEncontrada.id,
+        clasificacion: clasificacion
+    });
 
 };
 
@@ -206,5 +253,6 @@ module.exports = {
     buscarIncidenciaPorId,
     cambiarEstadoIncidencia,
     eliminarIncidencia,
-    obtenerEstadisticas
+    obtenerEstadisticas,
+    clasificarIncidencia
 };
