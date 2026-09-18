@@ -218,22 +218,19 @@ const clasificarIncidencia = (req, res) => {
     let clasificacion;
 
 
-    switch (incidenciaEncontrada.prioridad) {
+    switch (incidenciaEncontrada.prioridad.trim().toLowerCase()) {
 
-        case "Alta":
+        case "alta":
             clasificacion = "Crítica";
             break;
 
-
-        case "Media":
+        case "media":
             clasificacion = "Importante";
             break;
 
-
-        case "Baja":
+        case "baja":
             clasificacion = "Normal";
             break;
-
 
         default:
             clasificacion = "No definida";
@@ -242,7 +239,7 @@ const clasificarIncidencia = (req, res) => {
 
     return res.status(200).json({
         id: incidenciaEncontrada.id,
-        clasificacion: clasificacion
+        clasificacion
     });
 
 };
