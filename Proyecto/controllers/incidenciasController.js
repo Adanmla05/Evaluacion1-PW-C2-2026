@@ -1,44 +1,38 @@
 const incidencias = [];
+let siguienteId = 1;
 
 const registrarIncidencia = (req, res) => {
 
-const {
-    empleado,
-    descripcion,
-    prioridad
-} = req.body;
+    const {
+        empleado,
+        descripcion,
+        prioridad
+    } = req.body;
 
-
-if (
-    !empleado ||
-    !descripcion ||
-    !prioridad
-) {
-    return res.status(400).json({
-        mensaje: "Todos los campos son obligatorios"
-    });
-}
+    if (
+        !empleado ||
+        !descripcion ||
+        !prioridad
+    ) {
+        return res.status(400).json({
+            mensaje: "Todos los campos son obligatorios"
+        });
+    }
 
     const nuevaIncidencia = {
+        id: siguienteId++,
+        empleado,
+        descripcion,
+        prioridad,
+        estado: "Pendiente"
+    };
 
-    id: incidencias.length + 1,
-    empleado,
-    descripcion,
-    prioridad,
-    estado: "Pendiente"
+    incidencias.push(nuevaIncidencia);
 
-};
-
-
-incidencias.push(nuevaIncidencia);
-
-
-return res.status(201).json({
-    mensaje: "Incidencia registrada correctamente",
-    incidencia: nuevaIncidencia
-});
-
-
+    return res.status(201).json({
+        mensaje: "Incidencia registrada correctamente",
+        incidencia: nuevaIncidencia
+    });
 };
 
 const listarIncidencias = (req, res) => {
